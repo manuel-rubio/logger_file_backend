@@ -29,6 +29,9 @@ defmodule LoggerFileBackend do
     {:ok, {:ok, path}, state}
   end
 
+  def handle_call({_level, gl, {Logger, _msg, _ts, _md}}, state) when node(gl) != node() do
+    {:ok, state}
+  end
   def handle_event(
         {level, _gl, {Logger, msg, ts, md}},
         %{level: min_level, metadata_filter: metadata_filter} = state
